@@ -1,0 +1,32 @@
+@startuml
+title Диаграмма взаимодействий (последовательности): шаг анимации
+actor Пользователь
+participant Main
+participant Timer
+participant Colony
+participant Ant
+participant Graph
+participant Edge
+participant GraphPanel
+
+Пользователь -> Main : нажать «Пуск»
+Main -> Timer : start()
+loop каждый кадр (16 мс)
+  Timer -> Colony : tick(distance)
+  loop для каждого муравья
+    Colony -> Ant : chooseNext(graph, α, β, rnd)
+    Ant -> Graph : getEdge(current, u)
+    Graph --> Ant : Edge
+    Ant -> Edge : getPheromone(), getVisibility()
+    Ant --> Colony : next выбран
+    Colony -> Ant : advance(graph, distance)
+  end
+  alt все муравьи завершили маршрут
+    Colony -> Colony : finishCycle()
+    Colony -> Edge : evaporate(ρ)
+    Colony -> Edge : deposit(Q / L)
+  end
+  Timer -> GraphPanel : repaint()
+  GraphPanel -> Colony : getAnts(), getBestTour()
+end
+@enduml

@@ -1,0 +1,96 @@
+@startuml
+title Диаграмма классов
+skinparam classAttributeIconSize 0
+
+class Node {
+  -id : int
+  -x : double
+  -y : double
+  +distanceTo(other : Node) : double
+}
+
+class Edge {
+  -a : Node
+  -b : Node
+  -length : double
+  -pheromone : double
+  -visits : long
+  +getVisibility() : double
+  +evaporate(rho : double, min : double)
+  +deposit(amount : double)
+  +markVisited()
+}
+
+class Graph {
+  -nodes : List<Node>
+  -edges : List<Edge>
+  -matrix : Edge[][]
+  +getEdge(i : int, j : int) : Edge
+  +tourLength(tour : List<Integer>) : double
+  +resetPheromone(value : double)
+  +maxPheromone() : double
+}
+
+class Ant {
+  -id : int
+  -startNode : int
+  -current : int
+  -next : int
+  -progress : double
+  -tour : List<Integer>
+  -tourLength : double
+  -state : State
+  +reset()
+  +chooseNext(g : Graph, alpha, beta, rnd)
+  +advance(g : Graph, distance : double) : boolean
+  +pheromoneAmount(q : double) : double
+  +position(g : Graph) : double[]
+}
+
+enum "Ant.State" as State {
+  CHOOSING
+  MOVING
+  FINISHED
+}
+
+class Colony {
+  -alpha : double
+  -beta : double
+  -rho : double
+  -q : double
+  -cycle : int
+  -bestTour : List<Integer>
+  -bestLength : double
+  +spawnAnts(count : int)
+  +tick(distance : double)
+  +runCycle()
+  +run(cycles : int)
+  -finishCycle()
+  +convergence() : double
+  +reset()
+}
+
+class GraphPanel {
+  -showBest : boolean
+  #paintComponent(g : Graphics)
+}
+
+class Main {
+  +main(args : String[])
+  -headless(cycles : int)
+  -bruteForce(g : Graph) : double
+  -startGui()
+}
+
+Graph "1" *-- "many" Node
+Graph "1" *-- "many" Edge
+Edge --> "2" Node
+Colony "1" o-- "many" Ant
+Colony --> Graph
+Ant --> Graph : читает феромон
+Ant ..> State
+GraphPanel --> Colony
+Main ..> Colony
+Main ..> GraphPanel
+Main ..> Graph
+@enduml

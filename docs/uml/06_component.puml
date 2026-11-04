@@ -1,0 +1,22 @@
+@startuml
+title Диаграмма компонентов
+package "aco" {
+  component "Main\n(запуск, GUI, консоль)" as Main
+  component "GraphPanel\n(визуализация, Swing)" as Panel
+  component "Colony\n(цикл, феромон)" as Colony
+  component "Ant\n(выбор пути, движение)" as Ant
+  component "Graph\n(среда)" as Graph
+  component "Node / Edge\n(города и пути)" as NE
+}
+component "javax.swing / java.awt" as Swing
+
+Main --> Panel
+Main --> Colony
+Panel --> Colony
+Panel ..> Swing
+Main ..> Swing
+Colony --> Ant
+Colony --> Graph
+Ant --> Graph
+Graph --> NE
+@enduml

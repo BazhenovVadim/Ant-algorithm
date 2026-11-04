@@ -1,0 +1,10 @@
+@startuml
+title Диаграмма состояний муравья
+[*] --> CHOOSING : reset()
+
+CHOOSING --> MOVING : chooseNext()\n[есть непосещённые узлы\nили возврат в начало]
+MOVING --> MOVING : advance()\n[progress < 1]
+MOVING --> CHOOSING : advance()\n[progress ≥ 1,\nприбыл в узел,\nне весь маршрут пройден]
+MOVING --> FINISHED : advance()\n[вернулся в начальный узел,\nобошёл все узлы]
+FINISHED --> CHOOSING : reset()\n[новый цикл]
+@enduml

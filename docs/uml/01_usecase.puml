@@ -1,0 +1,27 @@
+@startuml
+title Диаграмма прецедентов
+left to right direction
+actor "Пользователь" as U
+
+rectangle "Система «Муравьиная колония»" {
+  usecase "Запустить / приостановить\nсимуляцию" as UC1
+  usecase "Сбросить симуляцию" as UC2
+  usecase "Изменить параметры\n(α, β, ρ, скорость)" as UC3
+  usecase "Просмотреть феромон\nна путях" as UC4
+  usecase "Просмотреть лучший\nмаршрут" as UC5
+  usecase "Запустить консольный\nпрогон + проверка перебором" as UC6
+  usecase "Выбрать следующий путь" as UC7
+  usecase "Обновить феромон" as UC8
+}
+
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC5
+U --> UC6
+UC1 ..> UC7 : <<include>>
+UC1 ..> UC8 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC6 ..> UC8 : <<include>>
+@enduml
